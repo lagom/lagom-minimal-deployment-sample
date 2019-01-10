@@ -4,6 +4,8 @@
 
 package com.example.helloproxy.impl
 
+import java.util.UUID
+
 import com.example.hello.api.HelloService
 import com.example.helloproxy.api.HelloProxyService
 import com.lightbend.lagom.scaladsl.api.ServiceCall
@@ -15,8 +17,11 @@ import scala.concurrent.{ ExecutionContext, Future }
   */
 class HelloProxyServiceImpl(helloService: HelloService)(implicit exCtx: ExecutionContext) extends HelloProxyService {
 
+  // Use a random UUID on the response as a poor man's node ID
+  val uuid = UUID.randomUUID()
+
   def proxyViaHttp(id: String) = ServiceCall { _ =>
-    val eventualString: Future[String] = helloService.hello(id).invoke()
+    val eventualString: Future[String] = helloService.hello(id).invoke().map{ resp => s"$resp (via proxy node $uuid)"}
     eventualString
   }
 
