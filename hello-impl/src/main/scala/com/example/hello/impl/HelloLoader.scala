@@ -8,6 +8,7 @@ import com.example.hello.api.HelloService
 import com.lightbend.lagom.scaladsl.api.ServiceLocator
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
+import com.lightbend.lagom.scaladsl.pubsub.PubSubComponents
 import com.lightbend.lagom.scaladsl.server._
 import com.softwaremill.macwire._
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -27,6 +28,7 @@ class HelloLoader extends LagomApplicationLoader {
 
 abstract class HelloApplication(context: LagomApplicationContext)
   extends LagomApplication(context)
+    with PubSubComponents
     with AhcWSComponents {
 
   // Bind the service that this server provides
