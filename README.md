@@ -32,6 +32,12 @@ curl https://$MINIKUBE_IP/api/hello/alice
 minikube dashboard  ## go to Deployments and scale each service at will
 ```
 
+## How this works
+
+Lagom services use the `ServiceLocator` provided by `reactive-lib`. It's a `ServiceLocator` directly using the `Dns` API provided by Akka (in this case Akka 2.5.19).
+
+The cluster is bootstrapped using `kubernetes-api` as configured by `rp` (aka `reactive-cli`).  
+
 ## Sample license
 
 Written in 2019 by Lightbend, Inc.
