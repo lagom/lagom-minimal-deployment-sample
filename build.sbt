@@ -21,10 +21,10 @@ lazy val `hello-api` = (project in file("hello-api"))
   )
 
 lazy val `hello-impl` = (project in file("hello-impl"))
-  .enablePlugins(LagomScala, SbtReactiveAppPlugin)
+  .enablePlugins(LagomScala)
   .settings(headerSettings)
   .settings(
-    dockerAliases in Docker += DockerAlias(None, None, "hello-impl", None),
+    dockerAliases in Docker += DockerAlias(None, None, "hello-lagom", None),
     packageName in Docker := "hello-lagom",
   )
   .settings(
@@ -44,10 +44,10 @@ lazy val `hello-proxy-api` = (project in file("hello-proxy-api"))
   )
 
 lazy val `hello-proxy-impl` = (project in file("hello-proxy-impl"))
-  .enablePlugins(LagomScala, SbtReactiveAppPlugin)
+  .enablePlugins(LagomScala)
   .settings(headerSettings)
   .settings(
-    dockerAliases in Docker += DockerAlias(None, None, "hello-proxy-impl", None),
+    dockerAliases in Docker += DockerAlias(None, None, "hello-proxy-lagom", None),
     packageName in Docker := "hello-proxy-lagom",
   )
   .settings(
