@@ -10,22 +10,19 @@ This is a minimal Lagom application used to demo and smoke-test deployment on Ku
 
 The above will test:
 
-a. cluster bootstrap to startup `hello` (PENDING)
-b. service discovery for intra-service (during cluster bootstrap)
-c. service discovery for inter-service (from `hello-proxy` to `proxy`)
+* cluster bootstrap to startup `hello` (PENDING)
+* service discovery for intra-service (during cluster bootstrap)
+* service discovery for inter-service (from `hello-proxy` to `proxy`)
 
 **NOTE**: this minimal sample avoids using any DB or broker to reduce the resources required to run. 
-
-## Pre-Requisites
-
-https://developer.lightbend.com/docs/lightbend-orchestration/current/
 
 ## Running
 
 ```bash
 minikube start
 eval $(minikube docker-env)
-sbt "deploy minikube"
+sbt docker:publishLocal
+kubectl apply -f deployment/minikube.ymldocker
 export MINIKUBE_IP=`minikube ip`
 curl https://$MINIKUBE_IP/proxy/rest-hello/alice
 curl https://$MINIKUBE_IP/api/hello/alice

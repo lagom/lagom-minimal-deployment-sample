@@ -1,0 +1,296 @@
+---
+apiVersion: "apps/v1beta2"
+kind: Deployment
+metadata:
+  name: "hello-lagom-minimal-service-v1-0-snapshot"
+  labels:
+    appName: "hello-lagom-minimal-service"
+    appNameVersion: "hello-lagom-minimal-service-v1-0-snapshot"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      appNameVersion: "hello-lagom-minimal-service-v1-0-snapshot"
+  template:
+    metadata:
+      labels:
+        appName: "hello-lagom-minimal-service"
+        appNameVersion: "hello-lagom-minimal-service-v1-0-snapshot"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: "hello-lagom-minimal-service"
+          image: "hello-lagom:1.0-SNAPSHOT"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "JAVA_OPTS"
+              value: "-Dplay.http.secret.key= -Dplay.filters.hosts.allowed.0="
+            - name: "RP_APP_NAME"
+              value: "hello-lagom-minimal-service"
+            - name: "RP_APP_TYPE"
+              value: lagom
+            - name: "RP_APP_VERSION"
+              value: "1.0-SNAPSHOT"
+            - name: "RP_DYN_JAVA_OPTS"
+              value: "-Dakka.discovery.kubernetes-api.pod-namespace=$RP_NAMESPACE"
+            - name: "RP_ENDPOINTS"
+              value: "HTTP,AKKA_REMOTE,AKKA_MGMT_HTTP"
+            - name: "RP_ENDPOINTS_COUNT"
+              value: "3"
+            - name: "RP_ENDPOINT_0_BIND_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_0_BIND_PORT"
+              value: "10000"
+            - name: "RP_ENDPOINT_0_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_0_PORT"
+              value: "10000"
+            - name: "RP_ENDPOINT_1_BIND_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_1_BIND_PORT"
+              value: "10001"
+            - name: "RP_ENDPOINT_1_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_1_PORT"
+              value: "10001"
+            - name: "RP_ENDPOINT_2_BIND_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_2_BIND_PORT"
+              value: "10002"
+            - name: "RP_ENDPOINT_2_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_2_PORT"
+              value: "10002"
+            - name: "RP_ENDPOINT_AKKA_MGMT_HTTP_BIND_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_AKKA_MGMT_HTTP_BIND_PORT"
+              value: "10002"
+            - name: "RP_ENDPOINT_AKKA_MGMT_HTTP_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_AKKA_MGMT_HTTP_PORT"
+              value: "10002"
+            - name: "RP_ENDPOINT_AKKA_REMOTE_BIND_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_AKKA_REMOTE_BIND_PORT"
+              value: "10001"
+            - name: "RP_ENDPOINT_AKKA_REMOTE_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_AKKA_REMOTE_PORT"
+              value: "10001"
+            - name: "RP_ENDPOINT_HTTP_BIND_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_HTTP_BIND_PORT"
+              value: "10000"
+            - name: "RP_ENDPOINT_HTTP_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_HTTP_PORT"
+              value: "10000"
+            - name: "RP_JAVA_OPTS"
+              value: "-Dconfig.resource=rp-application.conf -Dakka.management.cluster.bootstrap.contact-point-discovery.discovery-method=kubernetes-api -Dakka.management.cluster.bootstrap.contact-point-discovery.port-name=akka-mgmt-http -Dakka.management.cluster.bootstrap.contact-point-discovery.effective-name=hello-lagom-minimal-service -Dakka.management.cluster.bootstrap.contact-point-discovery.required-contact-point-nr=2 -Dakka.discovery.kubernetes-api.pod-label-selector=appName=%s"
+            - name: "RP_KUBERNETES_POD_IP"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_KUBERNETES_POD_NAME"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "metadata.name"
+            - name: "RP_MODULES"
+              value: "akka-cluster-bootstrapping,akka-management,common,play-http-binding,service-discovery,status"
+            - name: "RP_NAMESPACE"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "metadata.namespace"
+            - name: "RP_PLATFORM"
+              value: kubernetes
+          ports:
+            - containerPort: 10000
+              name: http
+            - containerPort: 10001
+              name: "akka-remote"
+            - containerPort: 10002
+              name: "akka-mgmt-http"
+          volumeMounts: []
+          command:
+            - "/rp-start"
+          args:
+            - "bin/hello-impl"
+          readinessProbe:
+            httpGet:
+              path: "/platform-tooling/ready"
+              port: "akka-mgmt-http"
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: "/platform-tooling/healthy"
+              port: "akka-mgmt-http"
+            periodSeconds: 10
+            initialDelaySeconds: 60
+      volumes: []
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    appName: "hello-lagom-minimal-service"
+  name: "hello-lagom-minimal-service"
+spec:
+  ports:
+    - name: http
+      port: 10000
+      protocol: TCP
+      targetPort: 10000
+    - name: "akka-remote"
+      port: 10001
+      protocol: TCP
+      targetPort: 10001
+    - name: "akka-mgmt-http"
+      port: 10002
+      protocol: TCP
+      targetPort: 10002
+  selector:
+    appName: "hello-lagom-minimal-service"
+---
+apiVersion: "apps/v1beta2"
+kind: Deployment
+metadata:
+  name: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+  labels:
+    appName: "hello-proxy-lagom-minimal-service"
+    appNameVersion: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      appNameVersion: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+  template:
+    metadata:
+      labels:
+        appName: "hello-proxy-lagom-minimal-service"
+        appNameVersion: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: "hello-proxy-lagom-minimal-service"
+          image: "hello-proxy-lagom:1.0-SNAPSHOT"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "JAVA_OPTS"
+              value: "-Dplay.http.secret.key= -Dplay.filters.hosts.allowed.0="
+            - name: "RP_APP_NAME"
+              value: "hello-proxy-lagom-minimal-service"
+            - name: "RP_APP_TYPE"
+              value: lagom
+            - name: "RP_APP_VERSION"
+              value: "1.0-SNAPSHOT"
+            - name: "RP_ENDPOINTS"
+              value: HTTP
+            - name: "RP_ENDPOINTS_COUNT"
+              value: "1"
+            - name: "RP_ENDPOINT_0_BIND_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_0_BIND_PORT"
+              value: "10000"
+            - name: "RP_ENDPOINT_0_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_0_PORT"
+              value: "10000"
+            - name: "RP_ENDPOINT_HTTP_BIND_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_HTTP_BIND_PORT"
+              value: "10000"
+            - name: "RP_ENDPOINT_HTTP_HOST"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_ENDPOINT_HTTP_PORT"
+              value: "10000"
+            - name: "RP_JAVA_OPTS"
+              value: "-Dconfig.resource=rp-application.conf"
+            - name: "RP_KUBERNETES_POD_IP"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "RP_KUBERNETES_POD_NAME"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "metadata.name"
+            - name: "RP_MODULES"
+              value: "common,play-http-binding,service-discovery"
+            - name: "RP_NAMESPACE"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "metadata.namespace"
+            - name: "RP_PLATFORM"
+              value: kubernetes
+          ports:
+            - containerPort: 10000
+              name: http
+          volumeMounts: []
+          command:
+            - "/rp-start"
+          args:
+            - "bin/hello-proxy-impl"
+      volumes: []
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    appName: "hello-proxy-lagom-minimal-service"
+  name: "hello-proxy-lagom-minimal-service"
+spec:
+  ports:
+    - name: http
+      port: 10000
+      protocol: TCP
+      targetPort: 10000
+  selector:
+    appName: "hello-proxy-lagom-minimal-service"
+---
+apiVersion: "extensions/v1beta1"
+kind: Ingress
+metadata:
+  name: "lagom-minimal-deployment-sample-ingress"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: "/proxy/rest-hello"
+            backend:
+              serviceName: "hello-proxy-lagom-minimal-service"
+              servicePort: 10000
+          - path: "/api/hello"
+            backend:
+              serviceName: "hello-lagom-minimal-service"
+              servicePort: 10000
