@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../base/deployment-hello.yml
+- ../../base/deployment-hello-proxy.yml
+- ../../base/service-hello.yml
+- ../../base/service-hello-proxy.yml
+- ingress.yml
+
+## The minikube kustomization doesn't do anything because the deployment-*.yml have all the right defaults.
+#images:
+#- name: "hello-lagom"
+#  newName: "hello-lagom"
+#  newTag: "1.0-SNAPSHOT"
+#- name: "hello-proxy-lagom"
+#  newName: "hello-proxy-lagom"
+#  newTag: "1.0-SNAPSHOT"

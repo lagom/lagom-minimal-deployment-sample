@@ -1,0 +1,50 @@
+---
+apiVersion: "apps/v1beta2"
+kind: Deployment
+metadata:
+  name: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+  labels:
+    appName: "hello-proxy-lagom-minimal-service"
+    appNameVersion: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      appNameVersion: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+  template:
+    metadata:
+      labels:
+        appName: "hello-proxy-lagom-minimal-service"
+        appNameVersion: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: "hello-lagom-minimal-service"
+          image: "hello-proxy-lagom:1.0-SNAPSHOT"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "JAVA_OPTS"
+              value: "-Dplay.http.secret.key=a-very-strong-key-for-production -Dplay.filters.hosts.allowed.0=myservice.example.org -Dplay.server.pidfile.path=/dev/null -Dakka.discovery.method=akka-dns"
+            - name: "TRANSPORT_HTTP_BIND_ADDRESS"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "DEPLOYMENT_SERVICE_NAME"
+              value: "hello-proxy-lagom-minimal-service"
+          ports:
+            - containerPort: 9000
+              name: http
+#          readinessProbe:
+#            httpGet:
+#              path: "/platform-tooling/ready"
+#              port: "akka-mgmt-http"
+#            periodSeconds: 10
+#          livenessProbe:
+#            httpGet:
+#              path: "/platform-tooling/healthy"
+#              port: "akka-mgmt-http"
+#            periodSeconds: 10
+#            initialDelaySeconds: 60
+          command:
+            - "/opt/docker/bin/hello-proxy-impl"
+      volumes: []

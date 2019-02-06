@@ -1,0 +1,57 @@
+---
+apiVersion: "apps/v1beta2"
+kind: Deployment
+metadata:
+  name: "hello-lagom-minimal-service-v1-0-snapshot"
+  labels:
+    appName: "hello-lagom-minimal-service"
+    appNameVersion: "hello-lagom-minimal-service-v1-0-snapshot"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      appNameVersion: "hello-lagom-minimal-service-v1-0-snapshot"
+  template:
+    metadata:
+      labels:
+        appName: "hello-lagom-minimal-service"
+        appNameVersion: "hello-lagom-minimal-service-v1-0-snapshot"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: "hello-lagom-minimal-service"
+          image: "hello-lagom:1.0-SNAPSHOT"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "JAVA_OPTS"
+              value: "-Dplay.http.secret.key=a-very-strong-key-for-production -Dplay.filters.hosts.allowed.0=myservice.example.org -Dplay.server.pidfile.path=/dev/null"
+            - name: "TRANSPORT_HTTP_BIND_ADDRESS"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "DEPLOYMENT_SERVICE_NAME"
+              value: "hello-lagom-minimal-service"
+          ports:
+            - containerPort: 9000
+              name: http
+            - containerPort: 9001
+              name: "akka-remote"
+            - containerPort: 9002
+              name: "akka-mgmt-http"
+          volumeMounts: []
+          args:
+            - "bin/hello-impl"
+#          readinessProbe:
+#            httpGet:
+#              path: "/platform-tooling/ready"
+#              port: "akka-mgmt-http"
+#            periodSeconds: 10
+#          livenessProbe:
+#            httpGet:
+#              path: "/platform-tooling/healthy"
+#              port: "akka-mgmt-http"
+#            periodSeconds: 10
+#            initialDelaySeconds: 60
+          command:
+            - "/opt/docker/bin/hello-impl"
+      volumes: []
