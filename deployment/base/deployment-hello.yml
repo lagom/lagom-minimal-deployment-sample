@@ -39,8 +39,6 @@ spec:
             - containerPort: 9002
               name: "akka-mgmt-http"
           volumeMounts: []
-          args:
-            - "bin/hello-impl"
 #          readinessProbe:
 #            httpGet:
 #              path: "/platform-tooling/ready"
