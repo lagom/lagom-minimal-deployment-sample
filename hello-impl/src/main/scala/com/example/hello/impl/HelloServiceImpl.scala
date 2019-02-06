@@ -19,7 +19,9 @@ import play.api.inject.ApplicationLifecycle
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-class HelloServiceImpl(pubSub: PubSubRegistry, applicationLifecycle: ApplicationLifecycle
+class HelloServiceImpl(
+//                        pubSub: PubSubRegistry,
+                        applicationLifecycle: ApplicationLifecycle
                       )(implicit exCtx: ExecutionContext,
                         materializer: Materializer
                       ) extends HelloService {
@@ -37,29 +39,29 @@ class HelloServiceImpl(pubSub: PubSubRegistry, applicationLifecycle: Application
     )
   }
 
-  val topic = pubSub.refFor(TopicId[String]("gossip"))
+//  val topic = pubSub.refFor(TopicId[String]("gossip"))
   // When was the last time a String was observed (where String is the node UUID).
   val observed = new AtomicReference[Map[String, Long]](Map.empty[String, Long])
   val finished = new AtomicBoolean(false)
 
-  topic.subscriber.map(x =>
-    observed.updateAndGet(new UnaryOperator[Map[String, Long]] {
-      override def apply(t: Map[String, Long]): Map[String, Long] = {
-        t + (x -> System.currentTimeMillis())
-      }
-    })
-  ).runWith(Sink.ignore)
+//  topic.subscriber.map(x =>
+//    observed.updateAndGet(new UnaryOperator[Map[String, Long]] {
+//      override def apply(t: Map[String, Long]): Map[String, Long] = {
+//        t + (x -> System.currentTimeMillis())
+//      }
+//    })
+//  ).runWith(Sink.ignore)
 
-  new Thread(
-    new Runnable {
-      override def run(): Unit = {
-        while (!finished.get()) {
-          topic.publish(uuid.toString)
-          TimeUnit.SECONDS.sleep(5)
-        }
-      }
-    }
-  ).start()
+//  new Thread(
+//    new Runnable {
+//      override def run(): Unit = {
+//        while (!finished.get()) {
+//          topic.publish(uuid.toString)
+//          TimeUnit.SECONDS.sleep(5)
+//        }
+//      }
+//    }
+//  ).start()
 
   applicationLifecycle.addStopHook {
     () =>
