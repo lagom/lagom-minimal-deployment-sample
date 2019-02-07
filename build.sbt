@@ -52,7 +52,7 @@ lazy val `hello-proxy-impl` = (project in file("hello-proxy-impl"))
   )
   .settings(
     libraryDependencies ++= Seq(
-      "com.lightbend.lagom" %% "lagom-scaladsl-akka-discovery-service-locator" % "0.0.11",
+      "com.lightbend.lagom" %% "lagom-scaladsl-akka-discovery-service-locator" % "0.0.12",
       lagomScaladslTestKit,
       macwire,
       scalaTest
