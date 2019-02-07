@@ -28,7 +28,7 @@ class HelloLoader extends LagomApplicationLoader {
 
 abstract class HelloApplication(context: LagomApplicationContext)
   extends LagomApplication(context)
-//    with PubSubComponents
+    with PubSubComponents
     with AhcWSComponents {
 
   // Bind the service that this server provides
