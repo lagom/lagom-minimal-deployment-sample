@@ -7,7 +7,7 @@ metadata:
     appName: "hello-lagom-minimal-service"
     appNameVersion: "hello-lagom-minimal-service-v1-0-snapshot"
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       appNameVersion: "hello-lagom-minimal-service-v1-0-snapshot"
@@ -34,10 +34,15 @@ spec:
           ports:
             - containerPort: 9000
               name: http
-            - containerPort: 9001
-              name: "akka-remote"
-            - containerPort: 9002
-              name: "akka-mgmt-http"
+            # akka remoting
+            - name: remoting
+              containerPort: 2552
+              protocol: TCP
+            # akka-management bootstrap
+            - name: management
+              containerPort: 8558
+              protocol: TCP
+
           volumeMounts: []
 #          readinessProbe:
 #            httpGet:

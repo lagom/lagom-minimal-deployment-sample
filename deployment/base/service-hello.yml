@@ -10,11 +10,5 @@ spec:
     - name: http
       port: 9000
       protocol: TCP
-    - name: "akka-remote"
-      port: 9001
-      protocol: TCP
-    - name: "akka-mgmt-http"
-      port: 9002
-      protocol: TCP
   selector:
     appName: "hello-lagom-minimal-service"

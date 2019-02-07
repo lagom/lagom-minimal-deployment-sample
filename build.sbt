@@ -29,6 +29,7 @@ lazy val `hello-impl` = (project in file("hello-impl"))
   )
   .settings(
     libraryDependencies ++= Seq(
+      "com.lightbend.akka.discovery" %% "akka-discovery-kubernetes-api" % "1.0.0-RC2",
       lagomScaladslPubSub,
       macwire,
       scalaTest

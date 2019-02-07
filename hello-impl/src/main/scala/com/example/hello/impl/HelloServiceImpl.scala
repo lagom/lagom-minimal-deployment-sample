@@ -19,7 +19,8 @@ import play.api.inject.ApplicationLifecycle
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-class HelloServiceImpl(pubSub: PubSubRegistry, applicationLifecycle: ApplicationLifecycle
+class HelloServiceImpl(pubSub: PubSubRegistry,
+                       applicationLifecycle: ApplicationLifecycle
                       )(implicit exCtx: ExecutionContext,
                         materializer: Materializer
                       ) extends HelloService {
