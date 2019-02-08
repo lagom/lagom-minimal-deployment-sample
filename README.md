@@ -16,14 +16,26 @@ The above will test:
 
 **NOTE**: this minimal sample avoids using any DB or broker to reduce the resources required to run. 
 
-## Running
+## Running in `minikube`
+
+Start `minikube` and setup your terminal:
 
 ```bash
 minikube start
-eval $(minikube docker-env)
-sbt docker:publishLocal
-kubectl apply -f deployment/minikube.ymldocker
 export MINIKUBE_IP=`minikube ip`
+eval $(minikube docker-env)
+```
+
+Deploy the application: 
+
+```bash
+sbt docker:publishLocal
+kustomize build deployment/overlays/minikube | kubectl apply -f - 
+```
+
+Test the deployment:
+
+```bash
 curl https://$MINIKUBE_IP/proxy/rest-hello/alice
 curl https://$MINIKUBE_IP/api/hello/alice
 minikube dashboard  ## go to Deployments and scale each service at will
