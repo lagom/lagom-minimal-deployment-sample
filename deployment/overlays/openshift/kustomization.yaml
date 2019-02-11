@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - ../../base/
+resources:
+  - route-hello.yml
+  - route-hello-proxy.yml
+  - rbac.yml
+
+images:
+  - name: "hello-lagom"
+    newName: "my-docker-registry-server.example.com/lagom-scala-minimal-deployment-example/hello-lagom"
+    newTag: "1.0-SNAPSHOT"
+  - name: "hello-proxy-lagom"
+    newName: "my-docker-registry-server.example.com/lagom-scala-minimal-deployment-example/hello-proxy-lagom"
+    newTag: "1.0-SNAPSHOT"

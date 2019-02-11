@@ -1,0 +1,24 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    appName: hello-proxy-lagom-minimal-service
+  name: hello-proxy-lagom
+  namespace: lagom-scala-minimal-deployment-example
+  selfLink: >-
+    /apis/route.openshift.io/v1/namespaces/lagom-scala-minimal-deployment-example/routes/hello-proxy-lagom
+spec:
+  host: my-lagom-minimal.example.org
+  path: /proxy/rest-hello
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: hello-proxy-lagom-minimal-service
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+    - conditions:
+      host: my-lagom-minimal.example.org
+      routerName: router

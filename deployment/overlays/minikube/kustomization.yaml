@@ -9,10 +9,3 @@ resources:
   - rbac.yml
 
 ## The minikube kustomization doesn't do anything because the deployment-*.yml have all the right defaults.
-#images:
-#- name: "hello-lagom"
-#  newName: "hello-lagom"
-#  newTag: "1.0-SNAPSHOT"
-#- name: "hello-proxy-lagom"
-#  newName: "hello-proxy-lagom"
-#  newTag: "1.0-SNAPSHOT"

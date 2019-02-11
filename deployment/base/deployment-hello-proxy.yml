@@ -19,12 +19,12 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - name: "hello-lagom-minimal-service"
+        - name: "hello-proxy-lagom-minimal-service"
           image: "hello-proxy-lagom:1.0-SNAPSHOT"
           imagePullPolicy: IfNotPresent
           env:
             - name: "JAVA_OPTS"
-              value: "-Dplay.http.secret.key=a-very-strong-key-for-production -Dplay.filters.hosts.allowed.0=myservice.example.org -Dplay.server.pidfile.path=/dev/null -Dakka.discovery.method=akka-dns"
+              value: "-Dplay.http.secret.key=a-very-strong-key-for-production -Dplay.filters.hosts.allowed.0=my-lagom-minimal.example.org -Dplay.server.pidfile.path=/dev/null -Dakka.discovery.method=akka-dns"
             - name: "TRANSPORT_HTTP_BIND_ADDRESS"
               valueFrom:
                 fieldRef:
