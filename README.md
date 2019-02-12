@@ -6,7 +6,7 @@ This is a minimal Lagom application used to demo and smoke-test deployment on Ku
 
 1. a `hello` service with a single endpoint responding with an echo
 1. the `hello` service is setup to require 3 nodes and build an Akka Cluster
-1. a `hello-proxy` service with a single endpoint fowarding the request to `hello` service
+1. a `hello-proxy` service with a single endpoint forwarding the request to `hello` service
 
 The above will test:
 
