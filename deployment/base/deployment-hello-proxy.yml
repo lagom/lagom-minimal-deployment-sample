@@ -2,20 +2,20 @@
 apiVersion: "apps/v1beta2"
 kind: Deployment
 metadata:
-  name: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+  name: "hello-proxy-lagom-minimal-service-v1-6-snapshot"
   labels:
     appName: "hello-proxy-lagom-minimal-service"
-    appNameVersion: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+    appNameVersion: "hello-proxy-lagom-minimal-service-v1-6-snapshot"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      appNameVersion: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+      appNameVersion: "hello-proxy-lagom-minimal-service-v1-6-snapshot"
   template:
     metadata:
       labels:
         appName: "hello-proxy-lagom-minimal-service"
-        appNameVersion: "hello-proxy-lagom-minimal-service-v1-0-snapshot"
+        appNameVersion: "hello-proxy-lagom-minimal-service-v1-6-snapshot"
     spec:
       restartPolicy: Always
       containers:
@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: "JAVA_OPTS"
-              value: "-Dplay.http.secret.key=a-very-strong-key-for-production -Dplay.filters.hosts.allowed.0=my-lagom-minimal.example.org -Dplay.server.pidfile.path=/dev/null -Dakka.discovery.method=akka-dns"
+              value: "-Dconfig.resource=application-prod.conf -Dplay.server.pidfile.path=/dev/null"
             - name: "TRANSPORT_HTTP_BIND_ADDRESS"
               valueFrom:
                 fieldRef:
@@ -36,15 +36,15 @@ spec:
               name: http
 #          readinessProbe:
 #            httpGet:
-#              path: "/platform-tooling/ready"
-#              port: "akka-mgmt-http"
+#              path: "/ready"
+#              port: "management"
 #            periodSeconds: 10
 #          livenessProbe:
 #            httpGet:
-#              path: "/platform-tooling/healthy"
-#              port: "akka-mgmt-http"
+#              path: "/healthy"
+#              port: "management"
 #            periodSeconds: 10
-#            initialDelaySeconds: 60
+#            initialDelaySeconds: 90
           command:
             - "/opt/docker/bin/hello-proxy-impl"
       volumes: []
