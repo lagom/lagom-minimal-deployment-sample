@@ -43,15 +43,16 @@ spec:
             - name: management
               containerPort: 8558
               protocol: TCP
+
           readinessProbe:
             httpGet:
               path: "/ready"
-              port: "management"
+              port: management
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: "/healthy"
-              port: "management"
+              path: "/alive"
+              port: management
             periodSeconds: 10
             initialDelaySeconds: 90
           command:
