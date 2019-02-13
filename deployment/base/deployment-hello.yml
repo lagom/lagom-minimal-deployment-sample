@@ -49,12 +49,14 @@ spec:
               path: "/ready"
               port: management
             periodSeconds: 10
+            initialDelaySeconds: 180
           livenessProbe:
             httpGet:
               path: "/alive"
               port: management
             periodSeconds: 10
-            initialDelaySeconds: 90
+            initialDelaySeconds: 120
+
           command:
             - "/opt/docker/bin/hello-impl"
       volumes: []
