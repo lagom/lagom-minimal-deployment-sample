@@ -49,13 +49,13 @@ spec:
               path: "/ready"
               port: management
             periodSeconds: 10
-            initialDelaySeconds: 30
+            initialDelaySeconds: 90
           livenessProbe:
             httpGet:
               path: "/alive"
               port: management
             periodSeconds: 10
-            initialDelaySeconds: 10
+            initialDelaySeconds: 60
 
           resources:
             limits:
