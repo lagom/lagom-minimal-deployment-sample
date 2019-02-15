@@ -1,0 +1,75 @@
+---
+apiVersion: "apps/v1beta2"
+kind: Deployment
+metadata:
+  name: "hello-lagom-minimal-service-v1-7-snapshot"
+  labels:
+    appName: "hello-lagom-minimal-service"
+    appNameVersion: "hello-lagom-minimal-service-v1-7-snapshot"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      appNameVersion: "hello-lagom-minimal-service-v1-7-snapshot"
+  template:
+    metadata:
+      labels:
+        appName: "hello-lagom-minimal-service"
+        appNameVersion: "hello-lagom-minimal-service-v1-7-snapshot"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: "hello-lagom-minimal-service"
+          image: "hello-lagom:1.0-SNAPSHOT"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "JAVA_OPTS"
+              value: "-Dconfig.resource=application-prod.conf -Dplay.server.pidfile.path=/dev/null"
+            - name: "TRANSPORT_HTTP_BIND_ADDRESS"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "DEPLOYMENT_SERVICE_NAME"
+              value: "hello-lagom-minimal-service"
+          ports:
+            # application
+            - name: http
+              containerPort: 9000
+            # akka remoting
+            - name: remoting
+              containerPort: 2552
+              protocol: TCP
+            # akka-management bootstrap
+            - name: management
+              containerPort: 8558
+              protocol: TCP
+          # The readiness and liveness probes are quite permissive because the
+          # resources (below) are very strict
+          readinessProbe:
+            httpGet:
+              path: "/ready"
+              port: management
+            initialDelaySeconds: 120
+            successThreshold: 1
+            periodSeconds: 5
+            failureThreshold: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: "/alive"
+              port: management
+            initialDelaySeconds: 90
+            successThreshold: 1
+            periodSeconds: 5
+            failureThreshold: 10
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 0.15
+              memory: 512Mi
+            requests:
+              cpu: 0.15
+              memory: 512Mi
+          command:
+            - "/opt/docker/bin/hello-impl"
+      volumes: []

@@ -1,7 +1,7 @@
 import com.typesafe.sbt.packager.docker.DockerAlias
 
 organization in ThisBuild := "com.example"
-version in ThisBuild := "1.0-SNAPSHOT"
+version in ThisBuild := "1.7-SNAPSHOT"
 
 // the Scala version that will be used for cross-compiled libraries
 scalaVersion in ThisBuild := "2.12.8"
@@ -9,7 +9,7 @@ scalaVersion in ThisBuild := "2.12.8"
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.0" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % Test
 
-lazy val `lagom-minimal-deployment-sample` = (project in file("."))
+lazy val `lagom-scala-minimal-deployment-example` = (project in file("."))
   .settings(headerSettings)
   .aggregate(`hello-api`, `hello-impl`, `hello-proxy-api`, `hello-proxy-impl`)
 
@@ -21,14 +21,15 @@ lazy val `hello-api` = (project in file("hello-api"))
   )
 
 lazy val `hello-impl` = (project in file("hello-impl"))
-  .enablePlugins(LagomScala, SbtReactiveAppPlugin)
+  .enablePlugins(LagomScala)
   .settings(headerSettings)
   .settings(
-    dockerAliases in Docker += DockerAlias(None, None, "hello-impl", None),
+    dockerAliases in Docker += DockerAlias(None, None, "hello-lagom", None),
     packageName in Docker := "hello-lagom",
   )
   .settings(
     libraryDependencies ++= Seq(
+      "com.lightbend.akka.discovery" %% "akka-discovery-kubernetes-api" % "1.0.0-RC2",
       lagomScaladslPubSub,
       macwire,
       scalaTest
@@ -44,14 +45,15 @@ lazy val `hello-proxy-api` = (project in file("hello-proxy-api"))
   )
 
 lazy val `hello-proxy-impl` = (project in file("hello-proxy-impl"))
-  .enablePlugins(LagomScala, SbtReactiveAppPlugin)
+  .enablePlugins(LagomScala)
   .settings(headerSettings)
   .settings(
-    dockerAliases in Docker += DockerAlias(None, None, "hello-proxy-impl", None),
+    dockerAliases in Docker += DockerAlias(None, None, "hello-proxy-lagom", None),
     packageName in Docker := "hello-proxy-lagom",
   )
   .settings(
     libraryDependencies ++= Seq(
+      "com.lightbend.lagom" %% "lagom-scaladsl-akka-discovery-service-locator" % "0.0.12",
       lagomScaladslTestKit,
       macwire,
       scalaTest

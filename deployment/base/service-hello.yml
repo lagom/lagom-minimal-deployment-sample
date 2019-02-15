@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    appName: "hello-lagom-minimal-service"
+  name: "hello-lagom-minimal-service"
+spec:
+  ports:
+    - name: http
+      port: 9000
+      protocol: TCP
+  selector:
+    appName: "hello-lagom-minimal-service"

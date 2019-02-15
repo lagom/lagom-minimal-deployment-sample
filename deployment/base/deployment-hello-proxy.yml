@@ -1,0 +1,62 @@
+---
+apiVersion: "apps/v1beta2"
+kind: Deployment
+metadata:
+  name: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
+  labels:
+    appName: "hello-proxy-lagom-minimal-service"
+    appNameVersion: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      appNameVersion: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
+  template:
+    metadata:
+      labels:
+        appName: "hello-proxy-lagom-minimal-service"
+        appNameVersion: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: "hello-proxy-lagom-minimal-service"
+          image: "hello-proxy-lagom:1.0-SNAPSHOT"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "JAVA_OPTS"
+              value: "-Dconfig.resource=application-prod.conf -Dplay.server.pidfile.path=/dev/null"
+            - name: "TRANSPORT_HTTP_BIND_ADDRESS"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "status.podIP"
+            - name: "DEPLOYMENT_SERVICE_NAME"
+              value: "hello-proxy-lagom-minimal-service"
+          ports:
+            # application
+            - name: http
+              containerPort: 9000
+
+          # readinessProbe:
+          #   httpGet:
+          #     path: "/ready"
+          #     port: management
+          #   periodSeconds: 10
+          #   initialDelaySeconds: 30
+          # livenessProbe:
+          #   httpGet:
+          #     path: "/alive"
+          #     port: management
+          #   periodSeconds: 10
+          #   initialDelaySeconds: 10
+
+          resources:
+            limits:
+              cpu: 0.15
+              memory: 512Mi
+            requests:
+              cpu: 0.15
+              memory: 512Mi
+
+          command:
+            - "/opt/docker/bin/hello-proxy-impl"
+      volumes: []

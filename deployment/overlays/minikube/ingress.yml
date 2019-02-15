@@ -1,0 +1,17 @@
+---
+apiVersion: "extensions/v1beta1"
+kind: Ingress
+metadata:
+  name: "lagom-minimal-deployment-sample-ingress"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: "/api/hello"
+            backend:
+              serviceName: "hello-lagom-minimal-service"
+              servicePort: 9000
+          - path: "/proxy/rest-hello"
+            backend:
+              serviceName: "hello-proxy-lagom-minimal-service"
+              servicePort: 9000
