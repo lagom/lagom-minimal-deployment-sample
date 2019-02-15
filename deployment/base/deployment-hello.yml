@@ -43,6 +43,8 @@ spec:
             - name: management
               containerPort: 8558
               protocol: TCP
+          # The readiness and liveness probes are quite permissive because the
+          # resources (below) are very strict
           readinessProbe:
             httpGet:
               path: "/ready"
