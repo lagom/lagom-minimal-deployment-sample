@@ -2,24 +2,24 @@
 apiVersion: "apps/v1beta2"
 kind: Deployment
 metadata:
-  name: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
+  name: "hello-proxy-lagom-scala-openshift-smoketests-service-v1-7-snapshot"
   labels:
-    appName: "hello-proxy-lagom-minimal-service"
-    appNameVersion: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
+    appName: "hello-proxy-lagom-scala-openshift-smoketests-service"
+    appNameVersion: "hello-proxy-lagom-scala-openshift-smoketests-service-v1-7-snapshot"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      appNameVersion: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
+      appNameVersion: "hello-proxy-lagom-scala-openshift-smoketests-service-v1-7-snapshot"
   template:
     metadata:
       labels:
-        appName: "hello-proxy-lagom-minimal-service"
-        appNameVersion: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
+        appName: "hello-proxy-lagom-scala-openshift-smoketests-service"
+        appNameVersion: "hello-proxy-lagom-scala-openshift-smoketests-service-v1-7-snapshot"
     spec:
       restartPolicy: Always
       containers:
-        - name: "hello-proxy-lagom-minimal-service"
+        - name: "hello-proxy-lagom-scala-openshift-smoketests-service"
           image: "hello-proxy-lagom:1.0-SNAPSHOT"
           imagePullPolicy: IfNotPresent
           env:
@@ -30,7 +30,7 @@ spec:
                 fieldRef:
                   fieldPath: "status.podIP"
             - name: "DEPLOYMENT_SERVICE_NAME"
-              value: "hello-proxy-lagom-minimal-service"
+              value: "hello-proxy-lagom-scala-openshift-smoketests-service"
           ports:
             # application
             - name: http

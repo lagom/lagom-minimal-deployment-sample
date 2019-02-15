@@ -2,16 +2,16 @@
 apiVersion: "extensions/v1beta1"
 kind: Ingress
 metadata:
-  name: "lagom-minimal-deployment-sample-ingress"
+  name: "lagom-scala-openshift-smoketests-sample-ingress"
 spec:
   rules:
     - http:
         paths:
           - path: "/api/hello"
             backend:
-              serviceName: "hello-lagom-minimal-service"
+              serviceName: "hello-lagom-scala-openshift-smoketests-service"
               servicePort: 9000
           - path: "/proxy/rest-hello"
             backend:
-              serviceName: "hello-proxy-lagom-minimal-service"
+              serviceName: "hello-proxy-lagom-scala-openshift-smoketests-service"
               servicePort: 9000

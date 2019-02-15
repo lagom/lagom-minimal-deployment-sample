@@ -15,7 +15,7 @@ trait HelloProxyService extends Service {
   override final def descriptor = {
     import Service._
 
-    named("hello-proxy-lagom-minimal-servicecd")
+    named("hello-proxy-lagom-scala-openshift-smoketests-servicecd")
       .withCalls(
         restCall(Method.GET, "/proxy/rest-hello/:id", proxyViaHttp _)
       ).withAutoAcl(true)
