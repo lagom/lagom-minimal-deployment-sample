@@ -6,13 +6,14 @@ export OPENSHIFT_SERVER=centralpark.lightbend.com
 export OPENSHIFT_PROJECT=lagom-scala-minimal-deployment-example
 export IMAGE_HELLO=hello-lagom
 export IMAGE_HELLO_PROXY=hello-proxy-lagom
-export TAG=1.6-SNAPSHOT
+export TAG=1.7-SNAPSHOT
 
 export DOCKER_REGISTRY_SERVER=docker-registry-default.centralpark.lightbend.com
 export DOCKER_REGISTRY=$DOCKER_REGISTRY_SERVER/$OPENSHIFT_PROJECT
 
 TOKEN=$1
 
+oc login https://$OPENSHIFT_SERVER --token=$TOKEN
 
 oc delete project $OPENSHIFT_PROJECT
 # while the project is deleted, we build the docker imges

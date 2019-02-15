@@ -2,20 +2,20 @@
 apiVersion: "apps/v1beta2"
 kind: Deployment
 metadata:
-  name: "hello-lagom-minimal-service-v1-6-snapshot"
+  name: "hello-lagom-minimal-service-v1-7-snapshot"
   labels:
     appName: "hello-lagom-minimal-service"
-    appNameVersion: "hello-lagom-minimal-service-v1-6-snapshot"
+    appNameVersion: "hello-lagom-minimal-service-v1-7-snapshot"
 spec:
   replicas: 3
   selector:
     matchLabels:
-      appNameVersion: "hello-lagom-minimal-service-v1-6-snapshot"
+      appNameVersion: "hello-lagom-minimal-service-v1-7-snapshot"
   template:
     metadata:
       labels:
         appName: "hello-lagom-minimal-service"
-        appNameVersion: "hello-lagom-minimal-service-v1-6-snapshot"
+        appNameVersion: "hello-lagom-minimal-service-v1-7-snapshot"
     spec:
       restartPolicy: Always
       containers:
@@ -43,20 +43,24 @@ spec:
             - name: management
               containerPort: 8558
               protocol: TCP
-
           readinessProbe:
             httpGet:
               path: "/ready"
               port: management
-            periodSeconds: 10
-            initialDelaySeconds: 90
+            initialDelaySeconds: 120
+            successThreshold: 1
+            periodSeconds: 5
+            failureThreshold: 10
+            timeoutSeconds: 3
           livenessProbe:
             httpGet:
               path: "/alive"
               port: management
-            periodSeconds: 10
-            initialDelaySeconds: 60
-
+            initialDelaySeconds: 90
+            successThreshold: 1
+            periodSeconds: 5
+            failureThreshold: 10
+            timeoutSeconds: 3
           resources:
             limits:
               cpu: 0.15

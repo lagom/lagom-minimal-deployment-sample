@@ -2,20 +2,20 @@
 apiVersion: "apps/v1beta2"
 kind: Deployment
 metadata:
-  name: "hello-proxy-lagom-minimal-service-v1-6-snapshot"
+  name: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
   labels:
     appName: "hello-proxy-lagom-minimal-service"
-    appNameVersion: "hello-proxy-lagom-minimal-service-v1-6-snapshot"
+    appNameVersion: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      appNameVersion: "hello-proxy-lagom-minimal-service-v1-6-snapshot"
+      appNameVersion: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
   template:
     metadata:
       labels:
         appName: "hello-proxy-lagom-minimal-service"
-        appNameVersion: "hello-proxy-lagom-minimal-service-v1-6-snapshot"
+        appNameVersion: "hello-proxy-lagom-minimal-service-v1-7-snapshot"
     spec:
       restartPolicy: Always
       containers:

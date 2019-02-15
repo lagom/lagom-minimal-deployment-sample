@@ -12,7 +12,7 @@ resources:
 images:
   - name: "hello-lagom"
     newName: "docker-registry-default.centralpark.lightbend.com/lagom-scala-minimal-deployment-example/hello-lagom"
-    newTag: "1.6-SNAPSHOT"
+    newTag: "1.7-SNAPSHOT"
   - name: "hello-proxy-lagom"
     newName: "docker-registry-default.centralpark.lightbend.com/lagom-scala-minimal-deployment-example/hello-proxy-lagom"
-    newTag: "1.6-SNAPSHOT"
+    newTag: "1.7-SNAPSHOT"

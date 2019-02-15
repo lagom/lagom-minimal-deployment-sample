@@ -26,14 +26,7 @@ class HelloProxyServiceImpl(helloService: HelloService, config: Config)(implicit
       helloService
         .hello(id)
         .invoke()
-        .map { resp =>
-          s"""
-             |$resp (via proxy node $uuid)"
-             |
-             | method origin description= ${config.withOnlyPath("akka.discovery.method").origin().description()}
-             |
-           """.stripMargin
-        }
+        .map { resp => s"      $resp (via proxy node $uuid)" }
     eventualString
   }
 }
