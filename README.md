@@ -1,6 +1,6 @@
-# Lagom Minimal Deployment Sample
+# Lagom Openshift Smoke Tests
 
-This is a minimal Lagom application used to demo and smoke-test deployment on Kubernetes and Openshift.
+This is a minimal Lagom application used to demo and smoke-test deployment on Openshift.
 
 ### Components
 
@@ -10,42 +10,11 @@ This is a minimal Lagom application used to demo and smoke-test deployment on Ku
 
 The above will test:
 
-* cluster bootstrap to startup `hello` (PENDING)
-* service discovery for intra-service (during cluster bootstrap)
-* service discovery for inter-service (from `hello-proxy` to `proxy`)
+* cluster bootstrap to startup `hello`
+* service discovery for intra-service (using kubernetes-api)
+* service discovery for inter-service (using DNS)
 
-**NOTE**: this minimal sample avoids using any DB or broker to reduce the resources required to run. 
-
-## Running in `minikube`
-
-Start `minikube` and setup your terminal:
-
-```bash
-minikube start
-export MINIKUBE_IP=`minikube ip`
-eval $(minikube docker-env)
-```
-
-Deploy the application: 
-
-```bash
-sbt docker:publishLocal
-kustomize build deployment/overlays/minikube | kubectl apply -f - 
-```
-
-Test the deployment:
-
-```bash
-curl https://$MINIKUBE_IP/proxy/rest-hello/alice
-curl https://$MINIKUBE_IP/api/hello/alice
-minikube dashboard  ## go to Deployments and scale each service at will
-```
-
-## How this works
-
-Lagom services use the `ServiceLocator` provided by `reactive-lib`. It's a `ServiceLocator` directly using the `Dns` API provided by Akka (in this case Akka 2.5.19).
-
-The cluster is bootstrapped using `kubernetes-api` as configured by `rp` (aka `reactive-cli`).  
+**NOTE**: this minimal sample avoids using any DB or broker to reduce the resources required to run.
 
 ## Sample license
 

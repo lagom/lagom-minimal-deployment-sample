@@ -13,7 +13,7 @@ trait HelloService extends Service {
 
   override final def descriptor = {
     import Service._
-    named("hello-lagom-minimal-service")
+    named("hello-lagom-scala-openshift-smoketests-service")
       .withCalls(
         pathCall("/api/hello/:id", hello _)
       )

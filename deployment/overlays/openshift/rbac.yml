@@ -13,7 +13,7 @@ metadata:
   name: read-pods
 subjects:
   - kind: User
-    name: system:serviceaccount:lagom-scala-minimal-deployment-example:default
+    name: system:serviceaccount:lagom-scala-openshift-smoketests:default
 roleRef:
   kind: Role
   name: pod-reader
