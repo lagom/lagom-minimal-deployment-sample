@@ -36,27 +36,6 @@ spec:
             - name: http
               containerPort: 9000
 
-          # readinessProbe:
-          #   httpGet:
-          #     path: "/ready"
-          #     port: management
-          #   periodSeconds: 10
-          #   initialDelaySeconds: 30
-          # livenessProbe:
-          #   httpGet:
-          #     path: "/alive"
-          #     port: management
-          #   periodSeconds: 10
-          #   initialDelaySeconds: 10
-
-          resources:
-            limits:
-              cpu: 0.15
-              memory: 512Mi
-            requests:
-              cpu: 0.15
-              memory: 512Mi
-
           command:
             - "/opt/docker/bin/hello-proxy-impl"
       volumes: []

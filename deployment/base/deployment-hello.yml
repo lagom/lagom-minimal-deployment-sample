@@ -43,32 +43,32 @@ spec:
             - name: management
               containerPort: 8558
               protocol: TCP
-          # The readiness and liveness probes are quite permissive because the
-          # resources (below) are very strict
+          # The readiness and liveness probes settings need to be tuned depending on the
+          # capacity of your cluster and the resources settings (below)
           readinessProbe:
             httpGet:
               path: "/ready"
-              port: management
-            initialDelaySeconds: 120
-            successThreshold: 1
-            periodSeconds: 5
-            failureThreshold: 10
-            timeoutSeconds: 3
-          livenessProbe:
-            httpGet:
-              path: "/alive"
               port: management
             initialDelaySeconds: 90
             successThreshold: 1
             periodSeconds: 5
             failureThreshold: 10
-            timeoutSeconds: 3
+            timeoutSeconds: 1
+          livenessProbe:
+            httpGet:
+              path: "/alive"
+              port: management
+            initialDelaySeconds: 60
+            successThreshold: 1
+            periodSeconds: 5
+            failureThreshold: 10
+            timeoutSeconds: 1
           resources:
             limits:
-              cpu: 0.15
+              cpu: 1
               memory: 512Mi
             requests:
-              cpu: 0.15
+              cpu: 1
               memory: 512Mi
           command:
             - "/opt/docker/bin/hello-impl"
