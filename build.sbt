@@ -70,3 +70,6 @@ def headerSettings: Seq[Setting[_]] = Seq(
   headerLicense := Some(HeaderLicense.Custom("Copyright (C) 2019 Lightbend Inc. <https://www.lightbend.com>")),
   licenses := Seq(("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")))
 )
+
+
+ThisBuild / scalacOptions ++= List("-encoding", "utf8", "-deprecation", "-feature", "-unchecked")
