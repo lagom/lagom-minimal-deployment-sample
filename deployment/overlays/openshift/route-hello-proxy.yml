@@ -12,6 +12,8 @@ spec:
   path: /proxy/rest-hello
   port:
     targetPort: http
+  tls:
+    termination: edge
   to:
     kind: Service
     name: hello-proxy-lagom-scala-openshift-smoketests-service
