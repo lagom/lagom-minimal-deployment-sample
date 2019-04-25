@@ -12,6 +12,8 @@ spec:
   path: /api/hello
   port:
     targetPort: http
+  tls:
+    termination: edge
   to:
     kind: Service
     name: hello-lagom-scala-openshift-smoketests-service
