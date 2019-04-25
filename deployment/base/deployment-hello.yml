@@ -65,10 +65,10 @@ spec:
             timeoutSeconds: 1
           resources:
             limits:
-              cpu: 1
+              cpu: 0.5
               memory: 512Mi
             requests:
-              cpu: 1
+              cpu: 0.5
               memory: 512Mi
           command:
             - "/opt/docker/bin/hello-impl"

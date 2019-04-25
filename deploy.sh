@@ -2,13 +2,13 @@
 
 
 
-export OPENSHIFT_SERVER=centralpark.lightbend.com
+export OPENSHIFT_SERVER=centralpark2.lightbend.com
 export OPENSHIFT_PROJECT=lagom-scala-openshift-smoketests
 export IMAGE_HELLO=hello-lagom
 export IMAGE_HELLO_PROXY=hello-proxy-lagom
 export TAG=1.7-SNAPSHOT
 
-export DOCKER_REGISTRY_SERVER=docker-registry-default.centralpark.lightbend.com
+export DOCKER_REGISTRY_SERVER=docker-registry-default.centralpark2.lightbend.com
 export DOCKER_REGISTRY=$DOCKER_REGISTRY_SERVER/$OPENSHIFT_PROJECT
 
 TOKEN=$1
@@ -38,4 +38,4 @@ docker push $DOCKER_REGISTRY/$IMAGE_HELLO_PROXY:$TAG
 kustomize build deployment/overlays/openshift | oc apply -f -
 
 echo "Try this deployment using:"
-echo 'curl -H "Host: my-lagom-openshift-smoketests.example.org"  http://$OPENSHIFT_PROJECT.$OPENSHIFT_SERVER/proxy/rest-hello/alice'
+echo 'curl -H "Host: my-lagom-openshift-smoketests.example.org"  https://$OPENSHIFT_PROJECT.$OPENSHIFT_SERVER/proxy/rest-hello/alice'
