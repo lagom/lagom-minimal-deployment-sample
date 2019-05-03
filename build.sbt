@@ -8,7 +8,6 @@ scalaVersion in ThisBuild := "2.12.8"
 
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.3.0" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % Test
-val lagomScaladslAkkaDiscovery = "com.lightbend.lagom" %% "lagom-scaladsl-akka-discovery-service-locator" % "1.5.1"
 
 lazy val `lagom-scala-openshift-smoketests` = (project in file("."))
   .settings(headerSettings)
@@ -30,7 +29,7 @@ lazy val `hello-impl` = (project in file("hello-impl"))
   )
   .settings(
     libraryDependencies ++= Seq(
-      "com.lightbend.akka.discovery" %% "akka-discovery-kubernetes-api" % "1.0.0",
+      "com.lightbend.akka.discovery" %% "akka-discovery-kubernetes-api" % "1.0.0-RC4",
       lagomScaladslPubSub,
       macwire,
       scalaTest
@@ -54,7 +53,7 @@ lazy val `hello-proxy-impl` = (project in file("hello-proxy-impl"))
   )
   .settings(
     libraryDependencies ++= Seq(
-      lagomScaladslAkkaDiscovery,
+      "com.lightbend.lagom" %% "lagom-scaladsl-akka-discovery-service-locator" % "0.0.12",
       lagomScaladslTestKit,
       macwire,
       scalaTest
