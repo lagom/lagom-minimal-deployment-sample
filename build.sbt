@@ -29,7 +29,7 @@ lazy val `hello-impl` = (project in file("hello-impl"))
   )
   .settings(
     libraryDependencies ++= Seq(
-      "com.lightbend.akka.discovery" %% "akka-discovery-kubernetes-api" % "1.0.0-RC4",
+      "com.lightbend.akka.discovery" %% "akka-discovery-kubernetes-api" % "1.0.0",
       lagomScaladslPubSub,
       macwire,
       scalaTest
@@ -53,7 +53,7 @@ lazy val `hello-proxy-impl` = (project in file("hello-proxy-impl"))
   )
   .settings(
     libraryDependencies ++= Seq(
-      "com.lightbend.lagom" %% "lagom-scaladsl-akka-discovery-service-locator" % "0.0.12",
+      lagomScaladslAkkaDiscovery,
       lagomScaladslTestKit,
       macwire,
       scalaTest
