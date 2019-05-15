@@ -2,8 +2,22 @@ language: scala
 scala: 2.12.8
 
 before_install: curl -Ls https://git.io/jabba | bash && . ~/.jabba/jabba.sh
-install: jabba install adopt@1.8.192-12 && jabba use $_ && java -version
-script: sbt test
+install: 
+  - jabba install adopt@1.8.212-03 && jabba use $_ && java -version
+  - echo "Installing oc 3.11"
+  - curl -OL https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
+  - echo "4b0f07428ba854174c58d2e38287e5402964c9a9355f6c359d1242efd0990da3  openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz" | sha256sum -c
+  - tar --strip 1 -xvfz openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz && chmod +x oc && sudo cp oc /usr/local/bin/ && rm oc
+  - echo "Installing kustomize 2.0.3"
+  - curl -OL https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.3/kustomize_2.0.3_linux_amd64
+  - echo "a04d79a013827c9ebb0abfe9d41cbcedf507a0310386c8d9a7efec7a36f9d7a3  kustomize_2.0.3_linux_amd64" | sha256sum -c
+  - chmod +x kustomize_2.0.3_linux_amd64 && sudo cp kustomize_2.0.3_linux_amd64 /usr/local/bin/kustomize && rm kustomize_2.0.3_linux_amd64
+
+# Following secret is for CP2_PLAY_PASSWORD (password of the 'play-team' user in centralpark2 cluster) 
+# The secret was created for the repo 'lagom/lagom-scala-openshift-smoketests'
+secure: "sQVk17VrDdxy6fy6CoJamVQZ7ZfMh2DrBxS/loCmU77uUhkH66tMhdmlkV0VFHcKGqzgrUwGlQOuK4B+uq/mY8wEtxEbsEY5e8SG0hPQGldCzSbZNxNpbV6LWSteCEyxXTM5ck7jV/NiL1P4wipH3/hB3xnbJXiFYX4J4fXXzaHOh2WGNsfhu9pswvTI4cmyM+rZf9ExFotWEMRGRgCUz6ohV1hQh/vBGdCvu8SZKEOIit5u+qkpGKYlZJziWLuYNRF/A3n33eI6JXoupMyd567C/lqVV5ddFM+zXPL+AUbHzqTJQKU62VN4U8WSQY8hJ71XJgzoBzmpxZwJn1ZvC9zz6M0Xtdfi5al6Fta/2lPzHfmIGFQ8FU2HKw+kbhxXgkt2yS9ApYT11/jc8LSZOl/Orp/6fC9/x9O3dPiaOfes5f6XFZ+Ae5VFybM3LbW0eII3BhTslAsYiHtLqjesrp5nTcykXQeV2uDGyMCr2e2t8eTEdy6VeqBECjz5/YkUUJNPyZogdR6Mhh1gSb84W288kReAT1Jeo5gbaEczCym+VcFd3ym6LutDPf6tav68+cfxpOQLGS3jYiFWDPTAOR+tSweylMzawmW7UKTCAiRImJMd5mrNvo+3LvomLjhbHwYbJALduod5YLRJS9P9pz25C25jBiYU+0189Emixs4="
+
+script: ./deploy.sh
 
 cache:
   directories:
