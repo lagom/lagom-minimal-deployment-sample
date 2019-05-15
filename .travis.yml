@@ -19,7 +19,9 @@ install:
 # The secret was created for the repo 'lagom/lagom-scala-openshift-smoketests'
 secure: "sQVk17VrDdxy6fy6CoJamVQZ7ZfMh2DrBxS/loCmU77uUhkH66tMhdmlkV0VFHcKGqzgrUwGlQOuK4B+uq/mY8wEtxEbsEY5e8SG0hPQGldCzSbZNxNpbV6LWSteCEyxXTM5ck7jV/NiL1P4wipH3/hB3xnbJXiFYX4J4fXXzaHOh2WGNsfhu9pswvTI4cmyM+rZf9ExFotWEMRGRgCUz6ohV1hQh/vBGdCvu8SZKEOIit5u+qkpGKYlZJziWLuYNRF/A3n33eI6JXoupMyd567C/lqVV5ddFM+zXPL+AUbHzqTJQKU62VN4U8WSQY8hJ71XJgzoBzmpxZwJn1ZvC9zz6M0Xtdfi5al6Fta/2lPzHfmIGFQ8FU2HKw+kbhxXgkt2yS9ApYT11/jc8LSZOl/Orp/6fC9/x9O3dPiaOfes5f6XFZ+Ae5VFybM3LbW0eII3BhTslAsYiHtLqjesrp5nTcykXQeV2uDGyMCr2e2t8eTEdy6VeqBECjz5/YkUUJNPyZogdR6Mhh1gSb84W288kReAT1Jeo5gbaEczCym+VcFd3ym6LutDPf6tav68+cfxpOQLGS3jYiFWDPTAOR+tSweylMzawmW7UKTCAiRImJMd5mrNvo+3LvomLjhbHwYbJALduod5YLRJS9P9pz25C25jBiYU+0189Emixs4="
 
-script: ./deploy.sh
+script: 
+  - sbt test
+  - ./deploy.sh
 
 cache:
   directories:
