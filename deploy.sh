@@ -10,6 +10,7 @@ export DOCKER_REGISTRY_SERVER=docker-registry-default.centralpark2.lightbend.com
 export DOCKER_REGISTRY=$DOCKER_REGISTRY_SERVER/$OPENSHIFT_PROJECT
 
 ## 1. login to the cluster
+echo "Attempting login to Openshift cluster (this will fail on PR builds)"
 oc login https://$OPENSHIFT_SERVER -p $CP2_PLAY_PASSWORD -u play-team || exit 1
 
 ## 2. Recreate the Openshift Project
