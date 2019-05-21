@@ -2,8 +2,46 @@ language: scala
 scala: 2.12.8
 
 before_install: curl -Ls https://git.io/jabba | bash && . ~/.jabba/jabba.sh
-install: jabba install adopt@1.8.192-12 && jabba use $_ && java -version
-script: sbt test
+install: 
+  - jabba install adopt@1.8.212-03 && jabba use $_ && java -version
+  - echo "Installing oc 3.11"
+  - curl -OL https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
+  - echo "4b0f07428ba854174c58d2e38287e5402964c9a9355f6c359d1242efd0990da3  openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz" | sha256sum -c
+  - tar --strip 1 -xvzf openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz && chmod +x oc && sudo cp oc /usr/local/bin/ && rm oc
+  - oc version && echo "oc CLI installed successfully"
+  - echo "Installing kustomize 2.0.3"
+  - curl -OL https://github.com/kubernetes-sigs/kustomize/releases/download/v2.0.3/kustomize_2.0.3_linux_amd64
+  - echo "a04d79a013827c9ebb0abfe9d41cbcedf507a0310386c8d9a7efec7a36f9d7a3  kustomize_2.0.3_linux_amd64" | sha256sum -c
+  - chmod +x kustomize_2.0.3_linux_amd64 && sudo cp kustomize_2.0.3_linux_amd64 /usr/local/bin/kustomize && rm kustomize_2.0.3_linux_amd64
+  - kustomize version && echo "kustomize CLI installed successfully"
+
+env:
+  global:
+    # Following secret is for CP2_PLAY_PASSWORD (password of the 'play-team' user in centralpark2 cluster) 
+    # The secret was created for the repo 'lagom/lagom-scala-openshift-smoketests' using
+    #  $ travis encrypt --com CP2_PLAY_PASSWORD="asdf-qwer"
+    # !!NOTE: the use of `--com` is required because the lagom org in travis uses tracis-ci.com (not travis-ci.org)
+    # See https://docs.travis-ci.com/user/encryption-keys/
+    - secure: "TD6FLmUd5og8agAhAQjJc0Y9cfTBA3v9ovs0LFVKcn2dbRevbubviwY5tQJs7Qg/fTLzufZnKFX0DOC6QK5NN8M1iianzxrzUtu8psGarDXVn8OeFYPdrPHrjzYhwYQpHPhUK1SDDQxk8/5e7i3M06YV0nvdxY2pbEIqIX06NARfKmPX0tMhLXaz4z11wy6P/sqs9LabSOAWov1ONGctjq2UCNZ9/AYVVznG1ba755UYeqDCxpBQ+3W/V2LsFHyS2BEMr9fCX6LDVyURLDQz3+0ikLhbSVpwVavFK+uPxmuFI8+C6XoW6LqzGur2MIhZJRePB9L/Am6TnRoHFq/lR3t84OLsxyzcgO4fqtT9LjBMLMu5DYHedksqVCqzhji9wB2DY5PuLVKbfmBPT59o3HfLKyUoKkM7r+M5rDrvstTcok66tpssGM/Exsybh08R7IDWhQwZfKbn+JOe8iSy6q0eoGkTvrHAq7ZNLCdqS469er0eFhbNzm1+0H6qjN+K2LAjqHP8ETkWgMdurbBwLS5UL1t9uLJwLPlukqzmrp2n7qAULc+p2dM7rV0E3RXFSYtk9BZpyoK6WhVUPs5FOCgJ2sb4FcQf3LD0D07vF4+UM3O+C2KzFd1sXPk0vpyvgg2cRnjf8EjCpxTDNy4yx7nw4R+HiBa4eI8hLno9WhQ="
+
+services:
+  - docker
+
+jobs:
+  include:
+  - stage: test
+    script:
+        - sbt test
+  - stage: deploy
+    script:
+        - ./deploy.sh
+
+stages:
+  - name: test
+    if: NOT tag =~ ^v
+  - name: deploy
+    if: repo = lagom/lagom-scala-openshift-smoketests
+
 
 cache:
   directories:
