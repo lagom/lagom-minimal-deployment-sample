@@ -1,5 +1,3 @@
-This sample application is archived. See https://github.com/lagom/lagom-samples for more example projects showcasing Lagom usage.
-
 # Lagom Openshift Smoke Tests
 
 This is a minimal Lagom application used to demo and smoke-test deployment on Openshift.
