@@ -1,5 +1,5 @@
-import com.typesafe.sbt.packager.docker.DockerAlias
 import com.lightbend.lagom.core.LagomVersion
+import com.typesafe.sbt.packager.docker.{ DockerAlias, DockerPermissionStrategy }
 
 organization in ThisBuild := "com.example"
 version in ThisBuild := "1.7-SNAPSHOT"
@@ -13,22 +13,20 @@ val lagomScaladslAkkaDiscovery = "com.lightbend.lagom" %% "lagom-scaladsl-akka-d
 
 lazy val `lagom-scala-openshift-smoketests` = (project in file("."))
   .settings(headerSettings)
+  .settings(disableDockerPublish)
   .aggregate(`hello-api`, `hello-impl`, `hello-proxy-api`, `hello-proxy-impl`)
 
 lazy val `hello-api` = (project in file("hello-api"))
+  .settings(headerSettings)
+  .settings(disableDockerPublish)
   .settings(
-    libraryDependencies += lagomScaladslApi
-  ).settings(
-    headerSettings
+    libraryDependencies += lagomScaladslApi,
   )
 
 lazy val `hello-impl` = (project in file("hello-impl"))
   .enablePlugins(LagomScala)
   .settings(headerSettings)
-  .settings(
-    dockerAliases in Docker += DockerAlias(None, None, "hello-lagom", None),
-    packageName in Docker := "hello-lagom",
-  )
+  .settings(dockerSettings("hello-lagom"))
   .settings(
     libraryDependencies ++= Seq(
       "com.lightbend.akka.discovery" %% "akka-discovery-kubernetes-api" % "1.0.0",
@@ -40,27 +38,24 @@ lazy val `hello-impl` = (project in file("hello-impl"))
   .dependsOn(`hello-api`)
 
 lazy val `hello-proxy-api` = (project in file("hello-proxy-api"))
+  .settings(headerSettings)
+  .settings(disableDockerPublish)
   .settings(
-    libraryDependencies +=lagomScaladslApi
-  ).settings(
-    headerSettings
+    libraryDependencies += lagomScaladslApi,
   )
 
 lazy val `hello-proxy-impl` = (project in file("hello-proxy-impl"))
   .enablePlugins(LagomScala)
   .settings(headerSettings)
-  .settings(
-    dockerAliases in Docker += DockerAlias(None, None, "hello-proxy-lagom", None),
-    packageName in Docker := "hello-proxy-lagom",
-  )
+  .settings(dockerSettings("hello-proxy-lagom"))
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslAkkaDiscovery,
       lagomScaladslTestKit,
       macwire,
       scalaTest
+    )
   )
-)
   .dependsOn(`hello-proxy-api`, `hello-api`)
 
 // This sample application doesn't need either Kafka or Cassandra so we disable them
@@ -73,5 +68,15 @@ def headerSettings: Seq[Setting[_]] = Seq(
   licenses := Seq(("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")))
 )
 
+def disableDockerPublish: Seq[Setting[_]] = Seq(
+  publish in Docker := {},
+)
+
+def dockerSettings(name: String): Seq[Setting[_]] = Seq(
+  dockerAliases in Docker += DockerAlias(None, None, name, None),
+  packageName in Docker := name,
+  dockerPermissionStrategy := DockerPermissionStrategy.Run,
+  dockerBaseImage := "adoptopenjdk/openjdk8",
+)
 
 ThisBuild / scalacOptions ++= List("-encoding", "utf8", "-deprecation", "-feature", "-unchecked")
